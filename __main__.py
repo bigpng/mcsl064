@@ -1,6 +1,6 @@
 from textwrap import dedent
 
-from exercises.binary_tree_ex import BinaryTree, binary_tree
+from exercises.binary_tree_ex import BST, BinaryTree, binary_tree, bst
 from exercises.linked_list_ex import DoublyLinkedList, LinkedList, doubly_linked_list, linked_list
 from exercises.queue_ex import IDeque, Queue, Queue2, ideque, iqueue, iqueue2
 from exercises.recursive_ex import (
@@ -28,7 +28,7 @@ def main() -> None:
     2. Remove multiple blanks     | 17. Singly-Linked list
     3. Reverse string             | 18. Doubly-linked list
     4. Toggle case                | 19. Binary Tree
-    5. Compute word frequency
+    5. Compute word frequency     | 20. Binary Search Tree
     6. Fibonacci (iterative)
     7. Fibonacci (recursive)
     9. Product (recursive)
@@ -110,6 +110,9 @@ def main() -> None:
         case 19:
             bt = BinaryTree()
             binary_tree(bt)
+        case 20:
+            bt = BST()
+            bst(bt)
         case _:
             print("Invalid input. Try again.")
 
