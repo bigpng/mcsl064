@@ -46,6 +46,8 @@ def reverse_string_recursive(text: str) -> str:
         return text
 
     return reverse_string_recursive(text[1:]) + text[0]
+    # rev("cat") -> rev("at") + "c" -> (rev("t") + "a") + "c" -> "tac" (Base case)
+    # text[1:] removes the first character
 
 
 # Exercise 7: Iterative
@@ -84,6 +86,19 @@ def product_recursive(a: int, b: int) -> int:
         return -product_recursive(a, -b)
 
     return a + product_recursive(a, b - 1)
+    # Repeatedly add a b number of times: with b - 1 until b = 0
+
+
+# Exercise 9 (without recursion)
+def product(a: int, b: int) -> int:
+    result = 0
+    if b < 0:
+        a, b = -a, -b
+
+    for _ in range(b):
+        result += a
+
+    return result
 
 
 def division_recursive(a: int, b: int) -> int:
@@ -107,9 +122,22 @@ def generate_subsets(elements: list[Any]) -> list[Any]:
     if not elements:
         return [[]]
 
-    first = elements[0]
+    first = elements[0]  # Get the first element
+    # Generate all subsets without the first element
     rest_subsets = generate_subsets(elements[1:])
 
+    # Create another set of subsets by adding the first element to every subset generated above
     with_first = [[first] + subset for subset in rest_subsets]
 
-    return rest_subsets + with_first
+    return rest_subsets + with_first  # Combine subsets
+
+
+# Exercise 10 (non-recursive)
+def generate_subsets_iterative(elements: list[Any]) -> list[list[Any]]:
+    subsets = [[]]
+
+    for element in reversed(elements):
+        with_element = [[element] + subset for subset in subsets]
+        subsets = subsets + with_element
+
+    return subsets

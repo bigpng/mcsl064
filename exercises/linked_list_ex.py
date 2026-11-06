@@ -10,14 +10,12 @@ class LinkedList:
     def __init__(self) -> None:
         self.head: Node | None = None
 
-    @staticmethod
-    def insert_at_beginning(head: Node | None, data: object) -> Node:
+    def insert_at_beginning(self, data: object) -> None:
         new_node = Node(data)
-        new_node.next = head  # Inserting at the beginning changes the head of the linked list
-        return new_node
+        new_node.next = self.head  # Inserting at the beginning changes the head of the linked list
+        self.head = new_node
 
-    @staticmethod
-    def insert_after_node(node: Node | None, data: object) -> None:
+    def insert_after_node(self, node: Node | None, data: object) -> None:
         if node is None:
             return
 
@@ -25,13 +23,13 @@ class LinkedList:
         new_node.next = node.next  # Connect the new node to next node
         node.next = new_node  # Connect the original node to the new node
 
-    @staticmethod
-    def insert_at_end(head: Node | None, data: object) -> Node:
+    def insert_at_end(self, data: object) -> None:
         new_node = Node(data)
-        if head is None:
-            return new_node
+        if self.head is None:
+            self.head = new_node
+            return
 
-        current = head  # Current is used to move through the linked list without changing head
+        current = self.head  # Current is used to move through the linked list without changing head
 
         # Keep moving the next node as long as a next node exists
         # Stops when current.next is None
@@ -39,48 +37,43 @@ class LinkedList:
             current = current.next
 
         current.next = new_node
-        return head
+        # As this is a pointer, it inserts at end
 
-    @staticmethod
-    def delete_at_beginning(head: Node | None) -> Node | None:
-        if head is None:
-            return None
+    def delete_at_beginning(self) -> None:
+        if self.head is None:
+            return
 
-        return head.next
+        self.head = self.head.next
 
-    @staticmethod
-    def delete_after_node(node: Node | None) -> None:
+    def delete_after_node(self, node: Node | None) -> None:
         if node is None or node.next is None:
             return
 
         # 10.next = 30: Change reference directly
         node.next = node.next.next
 
-    @staticmethod
-    def delete_at_end(head: Node | None) -> Node | None:
-        if head is None or head.next is None:
-            return None
+    def delete_at_end(self) -> None:
+        if self.head is None or self.head.next is None:
+            self.head = None
+            return
 
-        current = head
+        current = self.head
 
         # Stop at the second-last node
         while current.next is not None and current.next.next is not None:
             current = current.next
 
         current.next = None  # Disconnect the last node from current
-        return head
 
-    @staticmethod
-    def find_node(head: Node | None, param: object) -> Node | None:
-        current = head
+    def find_node(self, param: object) -> Node | None:
+        current = self.head
         while current is not None and current.data != param:
             current = current.next
 
         return current
 
-    @staticmethod
-    def traverse(head: Node | None) -> None:
-        current = head
+    def traverse(self) -> None:
+        current = self.head
 
         while current is not None:
             print(current.data, end=" -> ")
@@ -101,24 +94,24 @@ def linked_list(ll: LinkedList) -> None:
                 break
             case 1:
                 user_input = int(input("Enter an element: "))
-                ll.head = ll.insert_at_beginning(ll.head, user_input)
+                ll.insert_at_beginning(user_input)
             case 2:
                 user_input = int(input("Enter an element: "))
                 after = int(input("Enter after: "))
-                node = ll.find_node(ll.head, after)
+                node = ll.find_node(after)
                 ll.insert_after_node(node, user_input)
             case 3:
                 user_input = int(input("Enter an element: "))
-                ll.head = ll.insert_at_end(ll.head, user_input)
+                ll.insert_at_end(user_input)
             case 4:
-                ll.head = ll.delete_at_beginning(ll.head)
+                ll.delete_at_beginning()
             case 5:
                 user_input = int(input("Delete after: "))
-                ll.delete_after_node(ll.find_node(ll.head, user_input))
+                ll.delete_after_node(ll.find_node(user_input))
             case 6:
-                ll.head = ll.delete_at_end(ll.head)
+                ll.delete_at_end()
             case 7:
-                ll.traverse(ll.head)
+                ll.traverse()
             case _:
                 print("Invalid entry")
 
@@ -128,65 +121,61 @@ class DoublyLinkedList:
     def __init__(self) -> None:
         self.head: Node | None = None
 
-    @staticmethod
-    def insert_at_beginning(head: Node | None, data: object) -> Node:
+    def insert_at_beginning(self, data: object) -> None:
         new_node = Node(data)
         # Note: Push down
-        new_node.next = head  # Connect the new node to the existing head
-        if head:  # Connect old head backwards to the new node
-            head.prev = new_node
-        return new_node
+        new_node.next = self.head  # Connect the new node to the existing head
+        if self.head:  # Connect old head backwards to the new node
+            self.head.prev = new_node
+        self.head = new_node
 
-    @staticmethod
-    def insert_at_end(head: Node | None, data: object) -> Node:
+    def insert_at_end(self, data: object) -> None:
         new_node = Node(data)
-        if head is None:
-            return new_node
+        if self.head is None:
+            self.head = new_node
+            return
 
-        current = head
+        current = self.head
         while current.next:  # Find the last node
             current = current.next
 
         current.next = new_node  # Connect new node (forward connection)
         new_node.prev = current  # Connect the new node backwards to the old last node
-        return head
 
-    @staticmethod
-    def delete_at_beginning(head: Node | None) -> Node | None:
-        if head is None:
+    def delete_at_beginning(self) -> None:
+        if self.head is None:
             print("Doubly linked list is empty")
-            return None
+            return
 
-        if head.next is None:  # Check whether there is only one node
-            return None
+        if self.head.next is None:  # Check whether there is only one node
+            self.head = None
+            return
 
-        new_head = head.next  # Get the 2nd node from top
+        new_head = self.head.next  # Get the 2nd node from top
         new_head.prev = None  # New head has no previous node
-        del head
-        return new_head
+        del self.head
+        self.head = new_head
 
-    @staticmethod
-    def delete_at_end(head: Node | None) -> Node | None:
-        if head is None:
+    def delete_at_end(self) -> None:
+        if self.head is None:
             print("Doubly linked list is empty")
-            return None
+            return
 
-        if head.next is None:
-            return None
+        if self.head.next is None:
+            self.head = None
+            return
 
-        current = head
+        current = self.head
         while current.next is not None and current.next.next is not None:
             current = current.next  # Find last node
 
         del_node = current.next
         current.next = None
         del del_node
-        return head
 
-    @staticmethod
-    def traverse(head: Node | None) -> None:
+    def traverse(self) -> None:
         # Traverse the doubly linked list and print its elements
-        current = head
+        current = self.head
         while current:
             # Print current node's data
             print(current.data, end=" <-> ")
@@ -207,15 +196,15 @@ def doubly_linked_list(dll: DoublyLinkedList) -> None:
                 break
             case 1:
                 user_input = int(input("Enter an element: "))
-                dll.head = dll.insert_at_beginning(dll.head, user_input)
+                dll.insert_at_beginning(user_input)
             case 2:
                 user_input = int(input("Enter an element: "))
-                dll.head = dll.insert_at_end(dll.head, user_input)
+                dll.insert_at_end(user_input)
             case 3:
-                dll.head = dll.delete_at_beginning(dll.head)
+                dll.delete_at_beginning()
             case 4:
-                dll.head = dll.delete_at_end(dll.head)
+                dll.delete_at_end()
             case 5:
-                dll.traverse(dll.head)
+                dll.traverse()
             case _:
                 print("Invalid entry")

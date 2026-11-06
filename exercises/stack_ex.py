@@ -51,6 +51,7 @@ def evaluate_postfix(arr: list[str]) -> int:
     st = []
     for token in arr:
         if token[0].isdigit() or (len(token) > 1 and token[0] == "-"):
+            # Stack keeps numbers waiting to be used
             st.append(int(token))
         else:
             val1, val2 = st.pop(), st.pop()
@@ -69,3 +70,4 @@ def evaluate_postfix(arr: list[str]) -> int:
                 case _:
                     print("Unsupported operand")
     return int(st.pop())
+    # Removes and returns the top number
